@@ -1,6 +1,6 @@
 # SvelteKit + Supabase/Turso + Netlify Boilerplate
 
-A small SvelteKit TODO application with swappable persistence (Supabase or Turso) and Netlify deployment. Use it as a starting point for a full-stack web project.
+A small SvelteKit TODO application with swappable persistence (Supabase, Turso, or an in-memory demo provider) and Netlify deployment. Use it as a starting point for a full-stack web project.
 
 ## Quick start
 
@@ -8,11 +8,11 @@ Get the app running locally in about five minutes:
 
 ```bash
 bun install
-bun run setup   # pick Supabase or Turso, see below
+bun run setup   # pick a provider, or use memory for a zero-configuration demo
 bun run dev
 ```
 
-Open the local URL printed by Vite. The default provider is Supabase; before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
+Open the local URL printed by Vite. If no database credentials are configured, the app automatically uses the memory provider. Before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
 
 ```bash
 bun run db:link
@@ -23,15 +23,16 @@ The `db:link` command reads `SUPABASE_PROJECT_REF` from your shell environment (
 
 ## Choose a storage provider (`bun run setup`)
 
-The app talks to a small `TodoRepository` interface (`src/lib/db`), with one adapter per provider in `src/lib/db/adapters/<provider>`. Supported providers: **Supabase** and **Turso (libSQL)**.
+The app talks to a small `TodoRepository` interface (`src/lib/db`), with one adapter per provider in `src/lib/db/adapters/<provider>`. Supported providers are **Supabase**, **Turso (libSQL)**, and **Memory (demo)**.
 
 ```bash
 bun install
 bun run setup                              # interactive prompts
 bun run setup --provider turso --yes       # non-interactive
+bun run setup --provider memory --yes      # zero-configuration demo
 ```
 
-Flags: `--provider <supabase|turso>`, `--yes` (no prompts, never overwrites an existing `.env`), `--dry-run` (print what would change), `--no-install` (skip `bun install`).
+Flags: `--provider <supabase|turso|memory>`, `--yes` (no prompts, never overwrites an existing `.env`), `--dry-run` (print what would change), `--no-install` (skip `bun install`). If no provider is specified, setup defaults to memory when no database credentials are present.
 
 The command keeps only the chosen adapter, removes the other adapter and the dependencies and scripts it does not use, writes `src/lib/db/active.ts`, generates `.env` from `.env.example` (only the chosen provider's variables) and prints or runs the schema step:
 
@@ -39,6 +40,10 @@ The command keeps only the chosen adapter, removes the other adapter and the dep
 - **Supabase**: run `SUPABASE_PROJECT_REF=<ref> bun run db:link` and `bun run db:push`.
 
 `.env` is git-ignored. Setup is destructive for the unchosen provider's files, so run it once on a fresh clone and commit the result.
+
+## Connect a database
+
+The memory provider keeps data in the server process and resets when the process restarts. It is useful for trying the app without credentials, but it is not a production datastore. In serverless deployments, memory is local to each function instance, so data is not shared between instances. Choose Supabase or Turso with `bun run setup` when you need durable, shared data.
 
 ### Adding a new adapter
 
@@ -65,7 +70,7 @@ The command keeps only the chosen adapter, removes the other adapter and the dep
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key.
+Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key. You can also leave database variables empty: the app then runs in memory demo mode.
 
 | Variable | Required | Description |
 | --- | --- | --- |
