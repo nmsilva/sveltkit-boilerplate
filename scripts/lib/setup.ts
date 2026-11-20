@@ -104,12 +104,14 @@ export async function applySetup(rootDir: string, id: string, options: SetupOpti
 
 	await mkdir(join(rootDir, 'src/lib/db'), { recursive: true });
 	const activeSource = provider.id === 'memory'
-		? `export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = true;\nexport const getActiveProvider = () => "memory" as const;\n`
-		: `import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/${provider.id}";\n\nconst hasProviderCredentials = ${provider.id === 'supabase' ? 'Boolean(process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY)' : 'Boolean(process.env.TURSO_DATABASE_URL)'};\nexport const isDemoMode = !hasProviderCredentials;\nexport const getActiveProvider = () => (hasProviderCredentials ? "${provider.id}" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials ? createProviderRepository() : createMemoryRepository();\n}\n`;
+		? `export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = () => true;\nexport const getActiveProvider = () => "memory" as const;\n`
+		: `import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/${provider.id}";\n\nconst hasProviderCredentials = () => ${provider.id === 'supabase' ? 'Boolean(process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY)' : 'Boolean(process.env.TURSO_DATABASE_URL)'};\nexport const isDemoMode = () => !hasProviderCredentials();\nexport const getActiveProvider = () => (hasProviderCredentials() ? "${provider.id}" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials() ? createProviderRepository() : createMemoryRepository();\n}\n`;
 	await writeFile(join(rootDir, 'src/lib/db/active.ts'), activeSource);
 	for (const path of [...new Set([...otherProviders.map((candidate) => candidate.adapterDir), ...provider.removePaths])]) {
 		await rm(join(rootDir, path), { recursive: true, force: true });
 	}
+	// The template's selection test targets the unscaffolded active.ts, which setup replaces.
+	await rm(join(rootDir, 'src/lib/db/active.test.ts'), { force: true });
 	await updatePackage(rootDir, provider);
 	await rewriteExample(rootDir, provider.id);
 

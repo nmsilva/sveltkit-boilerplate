@@ -46,7 +46,7 @@ test('selects a provider from flags and rejects invalid flags', () => {
 test('writes the active adapter and removes the unselected files and package entries', async () => {
 	await applySetup(root, 'turso', { yes: true, noInstall: true, run: async () => 0 });
 	expect(await readFile(join(root, 'src/lib/db/active.ts'), 'utf8')).toBe(
-		'import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/turso";\n\nconst hasProviderCredentials = Boolean(process.env.TURSO_DATABASE_URL);\nexport const isDemoMode = !hasProviderCredentials;\nexport const getActiveProvider = () => (hasProviderCredentials ? "turso" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials ? createProviderRepository() : createMemoryRepository();\n}\n'
+		'import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/turso";\n\nconst hasProviderCredentials = () => Boolean(process.env.TURSO_DATABASE_URL);\nexport const isDemoMode = () => !hasProviderCredentials();\nexport const getActiveProvider = () => (hasProviderCredentials() ? "turso" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials() ? createProviderRepository() : createMemoryRepository();\n}\n'
 
 	);
 	expect(await Bun.file(join(root, 'src/lib/db/adapters/supabase/index.ts')).exists()).toBe(false);
@@ -70,7 +70,7 @@ test('generates a provider env and never overwrites an existing env', async () =
 test('supports selecting the memory provider without database files or dependencies', async () => {
 	await applySetup(root, 'memory', { yes: true, noInstall: true });
 	expect(await readFile(join(root, 'src/lib/db/active.ts'), 'utf8')).toBe(
-		'export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = true;\nexport const getActiveProvider = () => "memory" as const;\n'
+		'export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = () => true;\nexport const getActiveProvider = () => "memory" as const;\n'
 	);
 	expect(await Bun.file(join(root, 'src/lib/db/adapters/supabase/index.ts')).exists()).toBe(false);
 	expect(await Bun.file(join(root, 'src/lib/db/adapters/turso/index.ts')).exists()).toBe(false);

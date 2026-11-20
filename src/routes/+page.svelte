@@ -13,7 +13,7 @@
 	{#if data.demo}
 		<p class="demo-notice">
 			Demo mode — data is kept in memory and resets on restart
-			<a href="/README.md#connect-a-database">Connect a database</a>
+			<a href="https://github.com/nmsilva/sveltkit-boilerplate#connect-a-database" target="_blank" rel="noreferrer">Connect a database</a>
 		</p>
 	{/if}
 
