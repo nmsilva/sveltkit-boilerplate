@@ -10,6 +10,13 @@
 		<p>SvelteKit + Supabase + Netlify</p>
 	</header>
 
+	{#if data.demo}
+		<p class="demo-notice">
+			Demo mode — data is kept in memory and resets on restart
+			<a href="/README.md#connect-a-database">Connect a database</a>
+		</p>
+	{/if}
+
 	<form method="POST" action="?/create" class="create-form">
 		<label for="title">New todo</label>
 		<div>
@@ -171,5 +178,18 @@
 	.error {
 		margin-top: 0.75rem;
 		color: #fca5a5;
+	}
+
+	.demo-notice {
+		margin: 1rem 0;
+		padding: 0.75rem;
+		border: 1px solid #854d0e;
+		border-radius: 0.5rem;
+		background: #422006;
+		color: #fde68a;
+	}
+
+	.demo-notice a {
+		color: #fef3c7;
 	}
 </style>

@@ -1,4 +1,4 @@
-import { createTodoRepository } from '$lib/db';
+import { createTodoRepository, isDemoMode } from '$lib/db';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -11,9 +11,9 @@ function isValidTodoId(value: string) {
 export const load: PageServerLoad = async () => {
 	try {
 		const repository = createTodoRepository();
-		return { todos: await repository.list(), loadError: null };
+		return { todos: await repository.list(), loadError: null, demo: isDemoMode() };
 	} catch {
-		return { todos: [], loadError: 'Could not load todos right now. Please try again.' };
+		return { todos: [], loadError: 'Could not load todos right now. Please try again.', demo: isDemoMode() };
 	}
 };
 
