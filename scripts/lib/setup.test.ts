@@ -22,7 +22,7 @@ beforeEach(async () => {
 	await writeFile(join(root, 'src/lib/db/adapters/turso/index.ts'), 'turso');
 	await writeFile(
 		join(root, '.env.example'),
-		'# intro\n# >>> provider: supabase\n# Supabase URL\nPUBLIC_SUPABASE_URL=\nPUBLIC_SUPABASE_ANON_KEY=\n# <<< provider: supabase\n# >>> provider: turso\n# Turso URL\nTURSO_DATABASE_URL=\nTURSO_AUTH_TOKEN=\n# <<< provider: turso\n'
+		'# intro\n# >>> provider: supabase\n# Supabase URL\nPUBLIC_SUPABASE_URL=\nPUBLIC_SUPABASE_ANON_KEY=\n# <<< provider: supabase\n# >>> provider: turso\n# Turso URL\nTURSO_DATABASE_URL=\nTURSO_AUTH_TOKEN=\n# <<< provider: turso\n# >>> provider: memory\n# Memory provider\n# <<< provider: memory\n'
 	);
 	await writeFile(
 		join(root, 'package.json'),
@@ -37,6 +37,7 @@ beforeEach(async () => {
 afterEach(async () => rm(root, { recursive: true, force: true }));
 
 test('selects a provider from flags and rejects invalid flags', () => {
+	expect(parseArgs(['--provider', 'memory', '--yes'])).toMatchObject({ providerId: 'memory', yes: true });
 	expect(parseArgs(['--provider', 'turso', '--yes'])).toMatchObject({ providerId: 'turso', yes: true });
 	expect(() => parseArgs(['--wat'])).toThrow('Unknown option');
 	expect(() => selectProvider('missing')).toThrow('Unknown provider');
@@ -45,7 +46,8 @@ test('selects a provider from flags and rejects invalid flags', () => {
 test('writes the active adapter and removes the unselected files and package entries', async () => {
 	await applySetup(root, 'turso', { yes: true, noInstall: true, run: async () => 0 });
 	expect(await readFile(join(root, 'src/lib/db/active.ts'), 'utf8')).toBe(
-		'export { createTodoRepository } from "./adapters/turso/index";\n'
+		'import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/turso";\n\nconst hasProviderCredentials = Boolean(process.env.TURSO_DATABASE_URL);\nexport const isDemoMode = !hasProviderCredentials;\nexport const getActiveProvider = () => (hasProviderCredentials ? "turso" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials ? createProviderRepository() : createMemoryRepository();\n}\n'
+
 	);
 	expect(await Bun.file(join(root, 'src/lib/db/adapters/supabase/index.ts')).exists()).toBe(false);
 	expect(await Bun.file(join(root, 'supabase')).exists()).toBe(false);
@@ -63,6 +65,17 @@ test('generates a provider env and never overwrites an existing env', async () =
 	const result = await generateEnv(root, 'supabase', true);
 	expect(result).toBeNull();
 	expect(await readFile(join(root, '.env'), 'utf8')).toBe('KEEP=me\n');
+});
+
+test('supports selecting the memory provider without database files or dependencies', async () => {
+	await applySetup(root, 'memory', { yes: true, noInstall: true });
+	expect(await readFile(join(root, 'src/lib/db/active.ts'), 'utf8')).toBe(
+		'export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = true;\nexport const getActiveProvider = () => "memory" as const;\n'
+	);
+	expect(await Bun.file(join(root, 'src/lib/db/adapters/supabase/index.ts')).exists()).toBe(false);
+	expect(await Bun.file(join(root, 'src/lib/db/adapters/turso/index.ts')).exists()).toBe(false);
+	const pkg = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+	expect(pkg.dependencies).toEqual({ keep: '1' });
 });
 
 test('dry-run does not change files', async () => {

@@ -89,20 +89,27 @@ export async function applySetup(rootDir: string, id: string, options: SetupOpti
 		log(message);
 	};
 	const chosenExists = existsSync(join(rootDir, provider.adapterDir));
-	const other = providers.find((candidate) => candidate.id !== provider.id)!;
-	const otherExists = existsSync(join(rootDir, other.adapterDir));
+	const otherProviders = providers.filter(
+		(candidate) => candidate.id !== provider.id && (candidate.id !== 'memory' || provider.id === 'memory')
+	);
+	const otherExists = otherProviders.some((candidate) => existsSync(join(rootDir, candidate.adapterDir)));
 	if (chosenExists && !otherExists) announce(`Setup already selected ${provider.label}; applying it again is safe.`);
 	if (dryRun) {
 		announce(`Would select ${provider.label}.`);
-		announce(`Would remove ${[...new Set([other.adapterDir, ...provider.removePaths])].join(', ')}.`);
+		announce(`Would remove ${[...new Set([...otherProviders.map((candidate) => candidate.adapterDir), ...provider.removePaths])].join(', ')}.`);
 		announce('Would update package.json and .env.example.');
 		if (!options.noInstall) announce('Would run bun install.');
 		return messages;
 	}
 
 	await mkdir(join(rootDir, 'src/lib/db'), { recursive: true });
-	await writeFile(join(rootDir, 'src/lib/db/active.ts'), `export { createTodoRepository } from "./adapters/${provider.id}/index";\n`);
-	for (const path of provider.removePaths) await rm(join(rootDir, path), { recursive: true, force: true });
+	const activeSource = provider.id === 'memory'
+		? `export { createTodoRepository } from "./adapters/memory/index";\nexport const isDemoMode = true;\nexport const getActiveProvider = () => "memory" as const;\n`
+		: `import { createTodoRepository as createMemoryRepository } from "./adapters/memory";\nimport { createTodoRepository as createProviderRepository } from "./adapters/${provider.id}";\n\nconst hasProviderCredentials = ${provider.id === 'supabase' ? 'Boolean(process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY)' : 'Boolean(process.env.TURSO_DATABASE_URL)'};\nexport const isDemoMode = !hasProviderCredentials;\nexport const getActiveProvider = () => (hasProviderCredentials ? "${provider.id}" : "memory");\nexport function createTodoRepository() {\n\treturn hasProviderCredentials ? createProviderRepository() : createMemoryRepository();\n}\n`;
+	await writeFile(join(rootDir, 'src/lib/db/active.ts'), activeSource);
+	for (const path of [...new Set([...otherProviders.map((candidate) => candidate.adapterDir), ...provider.removePaths])]) {
+		await rm(join(rootDir, path), { recursive: true, force: true });
+	}
 	await updatePackage(rootDir, provider);
 	await rewriteExample(rootDir, provider.id);
 
