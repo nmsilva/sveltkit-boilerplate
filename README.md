@@ -1,122 +1,107 @@
-# SvelteKit + Supabase + Netlify TODO Boilerplate
+# SvelteKit + Supabase + Netlify Boilerplate
 
-A minimal TODO app boilerplate focused on easy deployment and simple persistence:
+A small SvelteKit TODO application with Supabase persistence and Netlify deployment. Use it as a starting point for a full-stack web project.
 
-- **Framework:** SvelteKit
-- **Database:** Supabase (persistence only, no auth/RLS/policies)
-- **Hosting:** Netlify
+## Quick start
 
-## Features
-
-- Create TODO
-- Toggle TODO done/undone
-- Delete TODO
-- Persistent data in Supabase
-
-## Prerequisites
-
-- Bun 1.2+
-- A Supabase project
-- A Netlify account
-
-## 1) Local setup
+Get the app running locally in about five minutes:
 
 ```bash
 bun install
 cp .env.example .env
-```
-
-Fill `.env` with your project values:
-
-```env
-PUBLIC_SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-```
-
-## 2) Create the database table
-
-Run this SQL in the Supabase SQL editor:
-
-```sql
-create extension if not exists "pgcrypto";
-
-create table if not exists public.todos (
-  id uuid primary key default gen_random_uuid(),
-  title text not null check (length(trim(title)) > 0),
-  is_done boolean not null default false,
-  created_at timestamptz not null default now()
-);
-```
-
-A migration file is also included at:
-
-- `supabase/migrations/0001_create_todos.sql`
-
-## 3) Run locally
-
-```bash
 bun run dev
 ```
 
-Open the local URL shown in your terminal.
-
-## 4) Deploy to Netlify
-
-1. Push this project to GitHub.
-2. In Netlify, create a new site from that repository.
-3. Build settings:
-   - **Build command:** `bun run build`
-   - Publish directory is handled automatically by `@sveltejs/adapter-netlify`.
-4. Add environment variables in Netlify:
-   - `PUBLIC_SUPABASE_URL`
-   - `PUBLIC_SUPABASE_ANON_KEY`
-5. Trigger deploy.
-
-`netlify.toml` is included with:
-
-- build command
-- Bun version pinning (`1.2.20`)
-
-## 5) Sync database (Supabase CLI)
-
-First-time setup:
+Open the local URL printed by Vite. Before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
 
 ```bash
-# Install once (macOS)
-brew install supabase/tap/supabase
-
-# Authenticate once
-supabase login
-
-# Link this repo to your project
 bun run db:link
-```
-
-Push migrations to remote DB:
-
-```bash
 bun run db:push
 ```
 
-Create a new migration:
+The `db:link` command reads `SUPABASE_PROJECT_REF` from your environment. Set it in `.env` before running the command, or export it in your shell. See [Environment variables](#environment-variables) for details.
+
+## Use this template
+
+[![Use this template](https://img.shields.io/badge/GitHub-Use%20this%20template-2ea44f?logo=github)](https://github.com/nmsilva/sveltkit-boilerplate/generate)
+
+1. Select **Use this template** on GitHub.
+2. Name your new repository and create it.
+3. Clone your repository and run the [quick start](#quick-start).
+4. Create a Supabase project and configure the environment variables.
+
+## Prerequisites
+
+- [Bun](https://bun.sh/) 1.2 or later
+- A [Supabase](https://supabase.com/) project
+- A [Netlify](https://www.netlify.com/) account for deployment
+- The Supabase CLI for database commands ([installation guide](https://supabase.com/docs/guides/cli))
+
+## Environment variables
+
+Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key.
+
+| Variable | Required | Description |
+| --- | --- | --- |
+| `PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL, available under **Project Settings > API**. |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes | The public anonymous key for your Supabase project, available under **Project Settings > API**. |
+| `SUPABASE_PROJECT_REF` | For database commands | The project reference used by `bun run db:link`. It is the project identifier in your Supabase URL and dashboard. |
+
+`PUBLIC_` variables are exposed to the browser. Do not put service-role keys, passwords, or other secrets in them. Never commit `.env`.
+
+## Database
+
+The initial migration is in `supabase/migrations/0001_create_todos.sql`. Link the local repository to your Supabase project, push migrations, and create future migrations with:
 
 ```bash
+bun run db:link
+bun run db:push
 bun run db:new <migration_name>
-# edit generated file in supabase/migrations/
-bun run db:push
 ```
 
-## 6) Verification checklist
+After creating a migration, edit the generated file and run `bun run db:push` to apply it.
 
-After deploy, verify:
+## Deploy to Netlify
 
-- You can create a TODO
-- You can toggle TODO completion
-- You can delete a TODO
-- Data persists after page refresh
-- Data persists across redeploys
+1. Push your repository to GitHub.
+2. In Netlify, choose **Add new site > Import an existing project** and select the repository.
+3. Use `bun run build` as the build command. The included `netlify.toml` already configures this and pins the Bun version.
+4. In the Netlify site settings, add `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` under **Environment variables**.
+5. Deploy the site.
 
-## Notes
+Run database migrations separately with the Supabase CLI. Netlify deployment does not automatically run `bun run db:push`.
 
-This starter intentionally skips auth and RLS for a very simple proof of concept.
-If you want multi-user safety for production, add authentication + row-level security in a next version.
+## Verification
+
+Use these commands before sharing a change:
+
+```bash
+bun run check
+bun run build
+```
+
+## Troubleshooting
+
+### The app cannot connect to Supabase
+
+Check that `.env` exists, the variable names are exact, and the values come from **Project Settings > API**. Restart `bun run dev` after changing environment variables.
+
+### `bun run db:link` cannot find the project reference
+
+Set `SUPABASE_PROJECT_REF` in `.env` or export it in your shell, then run the command again. Also make sure you have authenticated with the Supabase CLI.
+
+### Database queries fail or the TODO list is empty
+
+Run `bun run db:push` after linking the correct project. Confirm that the `todos` table exists in the Supabase Table Editor.
+
+### Netlify builds fail
+
+Confirm that the two `PUBLIC_SUPABASE_*` variables are configured for the deployment context, then retry the deploy. Run `bun run check` and `bun run build` locally to identify code or type errors first.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, branch conventions, and pull request expectations.
+
+## License
+
+This project is available under the [MIT License](LICENSE).
