@@ -1,6 +1,6 @@
-# SvelteKit + Supabase + Netlify Boilerplate
+# SvelteKit + Supabase/Turso + Netlify Boilerplate
 
-A small SvelteKit TODO application with Supabase persistence and Netlify deployment. Use it as a starting point for a full-stack web project.
+A small SvelteKit TODO application with swappable persistence (Supabase or Turso) and Netlify deployment. Use it as a starting point for a full-stack web project.
 
 ## Quick start
 
@@ -8,11 +8,11 @@ Get the app running locally in about five minutes:
 
 ```bash
 bun install
-cp .env.example .env
+bun run setup   # pick Supabase or Turso, see below
 bun run dev
 ```
 
-Open the local URL printed by Vite. Before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
+Open the local URL printed by Vite. The default provider is Supabase; before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
 
 ```bash
 bun run db:link
@@ -20,6 +20,32 @@ bun run db:push
 ```
 
 The `db:link` command reads `SUPABASE_PROJECT_REF` from your shell environment (it is not read from `.env`). Run it as `SUPABASE_PROJECT_REF=<your-project-ref> bun run db:link`, or export the variable first. See [Environment variables](#environment-variables) for details.
+
+## Choose a storage provider (`bun run setup`)
+
+The app talks to a small `TodoRepository` interface (`src/lib/db`), with one adapter per provider in `src/lib/db/adapters/<provider>`. Supported providers: **Supabase** and **Turso (libSQL)**.
+
+```bash
+bun install
+bun run setup                              # interactive prompts
+bun run setup --provider turso --yes       # non-interactive
+```
+
+Flags: `--provider <supabase|turso>`, `--yes` (no prompts, never overwrites an existing `.env`), `--dry-run` (print what would change), `--no-install` (skip `bun install`).
+
+The command keeps only the chosen adapter, removes the other adapter and the dependencies and scripts it does not use, writes `src/lib/db/active.ts`, generates `.env` from `.env.example` (only the chosen provider's variables) and prints or runs the schema step:
+
+- **Turso**: set `TURSO_DATABASE_URL` (and `TURSO_AUTH_TOKEN` for remote databases; a local `file:` URL such as `file:local.db` needs no token). If the URL is set when you run setup, the schema is applied automatically; otherwise run `bun src/lib/db/adapters/turso/migrate.ts`.
+- **Supabase**: run `SUPABASE_PROJECT_REF=<ref> bun run db:link` and `bun run db:push`.
+
+`.env` is git-ignored. Setup is destructive for the unchosen provider's files, so run it once on a fresh clone and commit the result.
+
+### Adding a new adapter
+
+1. Create `src/lib/db/adapters/<provider>/index.ts` exporting `createTodoRepository(): TodoRepository` (see `src/lib/db/types.ts`), plus its schema or migration and tests.
+2. Add a `# >>> provider: <id>` ... `# <<< provider: <id>` section with its variables to `.env.example`.
+3. Add an entry to `scripts/providers.ts` (adapter directory, dependencies, paths and scripts to remove when it is not chosen, schema steps). Also add the new provider's adapter directory and dependencies to the other providers' removal lists.
+4. Run `bun test`.
 
 ## Use this template
 
@@ -78,6 +104,7 @@ Use these commands before sharing a change:
 ```bash
 bun run check
 bun run build
+bun test
 ```
 
 ## Troubleshooting
