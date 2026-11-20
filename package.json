@@ -9,6 +9,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
+		"setup": "bun scripts/setup.ts",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"db:link": "supabase link --project-ref $SUPABASE_PROJECT_REF",
@@ -25,6 +26,7 @@
 		"vite": "^8.0.16"
 	},
 	"dependencies": {
+		"@clack/prompts": "^0.11.0",
 		"@supabase/supabase-js": "^2.110.7"
 	}
 }
