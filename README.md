@@ -19,7 +19,7 @@ bun run db:link
 bun run db:push
 ```
 
-The `db:link` command reads `SUPABASE_PROJECT_REF` from your environment. Set it in `.env` before running the command, or export it in your shell. See [Environment variables](#environment-variables) for details.
+The `db:link` command reads `SUPABASE_PROJECT_REF` from your shell environment (it is not read from `.env`). Run it as `SUPABASE_PROJECT_REF=<your-project-ref> bun run db:link`, or export the variable first. See [Environment variables](#environment-variables) for details.
 
 ## Use this template
 
@@ -45,7 +45,7 @@ Copy `.env.example` to `.env` and replace the placeholders with values from your
 | --- | --- | --- |
 | `PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL, available under **Project Settings > API**. |
 | `PUBLIC_SUPABASE_ANON_KEY` | Yes | The public anonymous key for your Supabase project, available under **Project Settings > API**. |
-| `SUPABASE_PROJECT_REF` | For database commands | The project reference used by `bun run db:link`. It is the project identifier in your Supabase URL and dashboard. |
+| `SUPABASE_PROJECT_REF` | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
 
 `PUBLIC_` variables are exposed to the browser. Do not put service-role keys, passwords, or other secrets in them. Never commit `.env`.
 
@@ -88,7 +88,7 @@ Check that `.env` exists, the variable names are exact, and the values come from
 
 ### `bun run db:link` cannot find the project reference
 
-Set `SUPABASE_PROJECT_REF` in `.env` or export it in your shell, then run the command again. Also make sure you have authenticated with the Supabase CLI.
+Export `SUPABASE_PROJECT_REF` in your shell (or prefix the command with it); `.env` is not read by this script. Then run the command again. Also make sure you have authenticated with the Supabase CLI.
 
 ### Database queries fail or the TODO list is empty
 

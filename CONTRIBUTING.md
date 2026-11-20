@@ -18,7 +18,7 @@ Thank you for helping improve this boilerplate.
    bun run dev
    ```
 
-If your change needs database updates, set `SUPABASE_PROJECT_REF` and use `bun run db:link`, `bun run db:push`, and `bun run db:new <migration_name>` as appropriate.
+If your change needs database updates, export `SUPABASE_PROJECT_REF` in your shell and use `bun run db:link`, `bun run db:push`, and `bun run db:new <migration_name>` as appropriate.
 
 ## Branches
 
