@@ -6,6 +6,7 @@ async function main() {
 	const args = parseArgs(process.argv.slice(2));
 	let providerId = args.providerId;
 	if (!providerId) {
+		if (args.yes) throw new Error('--yes requires --provider <id> (non-interactive mode)');
 		const answer = await select({
 			message: 'Choose a storage provider',
 			options: providers.map((provider) => ({ value: provider.id, label: provider.label }))
