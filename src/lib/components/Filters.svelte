@@ -9,7 +9,7 @@
 </script>
 
 <nav class="filters" aria-label="Filter todos">
-	{#each filters as item}
+	{#each filters as item (item.key)}
 		<a
 			href={item.key === 'all' ? '/' : `/?filter=${item.key}`}
 			aria-current={filter === item.key ? 'page' : undefined}
