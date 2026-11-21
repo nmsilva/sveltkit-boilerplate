@@ -26,12 +26,25 @@ Create a focused branch from the latest default branch. Use a short, descriptive
 
 ## Before opening a pull request
 
-Run both checks locally:
+Run the checks locally:
 
 ```bash
 bun run check
 bun run build
+bun test
 ```
+
+Run the end-to-end tests without credentials by installing Chromium and selecting a backend:
+
+```bash
+bunx playwright install chromium
+bun run test:e2e                         # memory backend by default
+E2E_BACKEND=memory bun run test:e2e
+E2E_BACKEND=turso-file bun run test:e2e
+E2E_BACKEND=turso-file bun run test:e2e:ui
+```
+
+The Turso file backend creates a temporary database and applies `src/lib/db/adapters/turso/schema.sql` before the preview server starts.
 
 Review the diff, update documentation when behavior or setup changes, and include a concise description of what changed and how it was tested.
 

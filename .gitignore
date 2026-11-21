@@ -1,6 +1,8 @@
 node_modules
 *.log
 coverage
+playwright-report
+test-results
 .idea
 
 # Output
