@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import type { Todo, TodoRepository } from '../../types';
 
 type SupabaseRow = Todo;

@@ -48,7 +48,7 @@
 		<p class="empty">No todos yet. Add your first item above.</p>
 	{:else}
 		<ul>
-			{#each data.todos as todo}
+			{#each data.todos as todo (todo.id)}
 				<li>
 					<form method="POST" action="?/toggle" class="inline-form">
 						<input type="hidden" name="id" value={todo.id} />
