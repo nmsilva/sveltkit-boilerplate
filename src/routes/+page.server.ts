@@ -11,9 +11,17 @@ function isValidTodoId(value: string) {
 export const load: PageServerLoad = async () => {
 	try {
 		const repository = createTodoRepository();
-		return { todos: await repository.list(), loadError: null, demo: isDemoMode() };
+		return {
+			todos: await repository.list(),
+			loadError: null,
+			demo: isDemoMode(),
+		};
 	} catch {
-		return { todos: [], loadError: 'Could not load todos right now. Please try again.', demo: isDemoMode() };
+		return {
+			todos: [],
+			loadError: 'Could not load todos right now. Please try again.',
+			demo: isDemoMode(),
+		};
 	}
 };
 
@@ -24,13 +32,17 @@ export const actions: Actions = {
 
 		if (!title) return fail(400, { createError: 'Title is required.' });
 		if (title.length > TITLE_MAX_LENGTH) {
-			return fail(400, { createError: `Title must be ${TITLE_MAX_LENGTH} characters or fewer.` });
+			return fail(400, {
+				createError: `Title must be ${TITLE_MAX_LENGTH} characters or fewer.`,
+			});
 		}
 
 		try {
 			await createTodoRepository().create(title);
 		} catch {
-			return fail(500, { createError: 'Could not create todo right now. Please try again.' });
+			return fail(500, {
+				createError: 'Could not create todo right now. Please try again.',
+			});
 		}
 		return { createSuccess: true };
 	},
@@ -48,7 +60,9 @@ export const actions: Actions = {
 		try {
 			await createTodoRepository().toggle(id, nextStateRaw === 'true');
 		} catch {
-			return fail(500, { itemError: 'Could not update todo right now. Please try again.' });
+			return fail(500, {
+				itemError: 'Could not update todo right now. Please try again.',
+			});
 		}
 		return { itemSuccess: true };
 	},
@@ -61,8 +75,10 @@ export const actions: Actions = {
 		try {
 			await createTodoRepository().remove(id);
 		} catch {
-			return fail(500, { itemError: 'Could not delete todo right now. Please try again.' });
+			return fail(500, {
+				itemError: 'Could not delete todo right now. Please try again.',
+			});
 		}
 		return { itemSuccess: true };
-	}
+	},
 };

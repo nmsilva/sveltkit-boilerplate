@@ -72,11 +72,11 @@ The memory provider keeps data in the server process and resets when the process
 
 Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key. You can also leave database variables empty: the app then runs in memory demo mode.
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL, available under **Project Settings > API**. |
-| `PUBLIC_SUPABASE_ANON_KEY` | Yes | The public anonymous key for your Supabase project, available under **Project Settings > API**. |
-| `SUPABASE_PROJECT_REF` | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
+| Variable                   | Required              | Description                                                                                                                                            |
+| -------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PUBLIC_SUPABASE_URL`      | Yes                   | Your Supabase project URL, available under **Project Settings > API**.                                                                                 |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes                   | The public anonymous key for your Supabase project, available under **Project Settings > API**.                                                        |
+| `SUPABASE_PROJECT_REF`     | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
 
 `PUBLIC_` variables are exposed to the browser. Do not put service-role keys, passwords, or other secrets in them. Never commit `.env`.
 

@@ -6,7 +6,8 @@ import type { TodoRepository } from './types';
 export type ActiveProvider = 'supabase' | 'turso' | 'memory';
 
 export function getActiveProvider(): ActiveProvider {
-	if (process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY) return 'supabase';
+	if (process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY)
+		return 'supabase';
 	if (process.env.TURSO_DATABASE_URL) return 'turso';
 	return 'memory';
 }
