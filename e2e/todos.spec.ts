@@ -7,7 +7,9 @@ function uniqueTitle(label: string) {
 async function addTodo(page: import('@playwright/test').Page, title: string) {
 	await page.getByTestId('todo-input').fill(title);
 	await page.getByTestId('todo-submit').click();
-	await expect(page.getByTestId('todo-item').filter({ hasText: title })).toBeVisible();
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: title }),
+	).toBeVisible();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -30,31 +32,49 @@ test('toggles completion and filters todos', async ({ page }) => {
 	await addTodo(page, activeTitle);
 	await addTodo(page, completedTitle);
 
-	const completedItem = page.getByTestId('todo-item').filter({ hasText: completedTitle });
+	const completedItem = page
+		.getByTestId('todo-item')
+		.filter({ hasText: completedTitle });
 	await completedItem.getByTestId('todo-checkbox').check();
 	await expect(completedItem.getByTestId('todo-checkbox')).toBeChecked();
 
 	await page.getByTestId('filter-active').click();
-	await expect(page.getByTestId('todo-item').filter({ hasText: activeTitle })).toBeVisible();
-	await expect(page.getByTestId('todo-item').filter({ hasText: completedTitle })).toHaveCount(0);
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: activeTitle }),
+	).toBeVisible();
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: completedTitle }),
+	).toHaveCount(0);
 
 	await page.getByTestId('filter-completed').click();
-	await expect(page.getByTestId('todo-item').filter({ hasText: completedTitle })).toBeVisible();
-	await expect(page.getByTestId('todo-item').filter({ hasText: activeTitle })).toHaveCount(0);
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: completedTitle }),
+	).toBeVisible();
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: activeTitle }),
+	).toHaveCount(0);
 });
 
-test('clears completed todos without removing active todos', async ({ page }) => {
+test('clears completed todos without removing active todos', async ({
+	page,
+}) => {
 	const activeTitle = uniqueTitle('Keep');
 	const completedTitle = uniqueTitle('Clear');
 	await addTodo(page, activeTitle);
 	await addTodo(page, completedTitle);
 
-	const completedItem = page.getByTestId('todo-item').filter({ hasText: completedTitle });
+	const completedItem = page
+		.getByTestId('todo-item')
+		.filter({ hasText: completedTitle });
 	await completedItem.getByTestId('todo-checkbox').check();
 	await page.getByTestId('clear-completed').click();
 
-	await expect(page.getByTestId('todo-item').filter({ hasText: completedTitle })).toHaveCount(0);
-	await expect(page.getByTestId('todo-item').filter({ hasText: activeTitle })).toBeVisible();
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: completedTitle }),
+	).toHaveCount(0);
+	await expect(
+		page.getByTestId('todo-item').filter({ hasText: activeTitle }),
+	).toBeVisible();
 });
 
 test('shows the demo notice for the memory backend', async ({ page }) => {
@@ -65,7 +85,11 @@ test('shows the demo notice for the memory backend', async ({ page }) => {
 test('requires a title', async ({ page }) => {
 	const input = page.getByTestId('todo-input');
 	await expect(input).toHaveJSProperty('required', true);
-	expect(await input.evaluate((element) => !(element as HTMLInputElement).checkValidity())).toBe(true);
+	expect(
+		await input.evaluate(
+			(element) => !(element as HTMLInputElement).checkValidity(),
+		),
+	).toBe(true);
 });
 
 test('rejects titles longer than 120 characters', async ({ page }) => {
@@ -75,5 +99,7 @@ test('rejects titles longer than 120 characters', async ({ page }) => {
 		element.value = 'x'.repeat(121);
 		element.form?.requestSubmit();
 	});
-	await expect(page.getByTestId('todo-error')).toHaveText('Title must be 120 characters or fewer.');
+	await expect(page.getByTestId('todo-error')).toHaveText(
+		'Title must be 120 characters or fewer.',
+	);
 });
