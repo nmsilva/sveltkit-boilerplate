@@ -26,12 +26,17 @@ Create a focused branch from the latest default branch. Use a short, descriptive
 
 ## Before opening a pull request
 
-Run both checks locally:
+Run all CI checks locally:
 
 ```bash
+bun run lint
+bun run format:check
 bun run check
+bun test
 bun run build
 ```
+
+Use `bun run format` to format files before checking them.
 
 Review the diff, update documentation when behavior or setup changes, and include a concise description of what changed and how it was tested.
 
