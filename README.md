@@ -102,6 +102,30 @@ After creating a migration, edit the generated file and run `bun run db:push` to
 
 Run database migrations separately with the Supabase CLI. Netlify deployment does not automatically run `bun run db:push`.
 
+## UI test selectors
+
+The TODO page exposes stable selectors for browser and integration tests:
+
+| Selector | Element |
+| --- | --- |
+| `todo-form` | New todo form |
+| `todo-input` | New todo title input |
+| `todo-submit` | Add todo button |
+| `todo-error` | Create validation error |
+| `todo-list` | Todo list |
+| `todo-item` | Individual todo item |
+| `todo-checkbox` | Todo completion checkbox |
+| `todo-delete` | Todo delete/confirmation button |
+| `filter-all` | All filter link |
+| `filter-active` | Active filter link |
+| `filter-completed` | Completed filter link |
+| `todo-count` | Active todo count |
+| `clear-completed` | Clear completed button |
+| `empty-state` | Empty list message |
+| `demo-notice` | In-memory demo notice |
+
+Delete uses a two-click confirmation when JavaScript is enabled. Without JavaScript, the regular form submission deletes immediately so the action remains usable.
+
 ## Verification
 
 Use these commands before sharing a change:
