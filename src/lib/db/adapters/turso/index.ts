@@ -1,5 +1,5 @@
 import { createClient, type Client } from '@libsql/client';
-import type { Todo, TodoRepository } from '../../types';
+import type { TodoRepository } from '../../types';
 
 export type TursoRepositoryConfig = {
 	url?: string;

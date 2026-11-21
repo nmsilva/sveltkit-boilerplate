@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, expect, test } from 'bun:test';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -6,8 +6,7 @@ import {
 	applySetup,
 	generateEnv,
 	parseArgs,
-	selectProvider,
-	type SetupOptions
+	selectProvider
 } from './setup';
 
 let root = '';
