@@ -22,7 +22,13 @@
 	{#if data.demo}
 		<p class="demo-notice" data-testid="demo-notice">
 			Demo mode — data is kept in memory and resets on restart.
-			<a href="https://github.com/nmsilva/sveltkit-boilerplate#connect-a-database" target="_blank" rel="noreferrer">Connect a database</a>
+			<a
+				href="https://github.com/nmsilva/sveltkit-boilerplate#connect-a-database"
+				target="_blank"
+				rel="noreferrer"
+			>
+				Connect a database
+			</a>
 		</p>
 	{/if}
 
@@ -36,9 +42,14 @@
 		<Filters filter={data.filter} />
 		<div class="summary-row">
 			<p class="count" data-testid="todo-count">{data.activeCount} left</p>
-			<form method="POST" action={`?/clearCompleted&filter=${encodeURIComponent(data.filter)}`}>
+			<form
+				method="POST"
+				action={`?/clearCompleted&filter=${encodeURIComponent(data.filter)}`}
+			>
 				<input type="hidden" name="filter" value={data.filter} />
-				<button type="submit" class="clear" data-testid="clear-completed">Clear completed</button>
+				<button type="submit" class="clear" data-testid="clear-completed">
+					Clear completed
+				</button>
 			</form>
 		</div>
 	</section>
@@ -67,7 +78,14 @@
 		margin: 0;
 		background: var(--page);
 		color: var(--text);
-		font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		font-family:
+			Inter,
+			ui-sans-serif,
+			system-ui,
+			-apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			sans-serif;
 	}
 
 	:global(button),

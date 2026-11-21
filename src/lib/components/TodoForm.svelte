@@ -3,7 +3,6 @@
 	let { filter, error }: { filter: string; error?: string } = $props();
 	let input: HTMLInputElement;
 	let originalTitle = '';
-
 </script>
 
 <form
@@ -40,7 +39,9 @@
 		<button type="submit" data-testid="todo-submit">Add todo</button>
 	</div>
 	{#if error}
-		<p id="todo-error" class="error" role="alert" data-testid="todo-error">{error}</p>
+		<p id="todo-error" class="error" role="alert" data-testid="todo-error">
+			{error}
+		</p>
 	{/if}
 </form>
 

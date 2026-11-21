@@ -72,11 +72,11 @@ The memory provider keeps data in the server process and resets when the process
 
 Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key. You can also leave database variables empty: the app then runs in memory demo mode.
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL, available under **Project Settings > API**. |
-| `PUBLIC_SUPABASE_ANON_KEY` | Yes | The public anonymous key for your Supabase project, available under **Project Settings > API**. |
-| `SUPABASE_PROJECT_REF` | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
+| Variable                   | Required              | Description                                                                                                                                            |
+| -------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PUBLIC_SUPABASE_URL`      | Yes                   | Your Supabase project URL, available under **Project Settings > API**.                                                                                 |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes                   | The public anonymous key for your Supabase project, available under **Project Settings > API**.                                                        |
+| `SUPABASE_PROJECT_REF`     | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
 
 `PUBLIC_` variables are exposed to the browser. Do not put service-role keys, passwords, or other secrets in them. Never commit `.env`.
 
@@ -106,23 +106,23 @@ Run database migrations separately with the Supabase CLI. Netlify deployment doe
 
 The TODO page exposes stable selectors for browser and integration tests:
 
-| Selector | Element |
-| --- | --- |
-| `todo-form` | New todo form |
-| `todo-input` | New todo title input |
-| `todo-submit` | Add todo button |
-| `todo-error` | Create validation error |
-| `todo-list` | Todo list |
-| `todo-item` | Individual todo item |
-| `todo-checkbox` | Todo completion checkbox |
-| `todo-delete` | Todo delete/confirmation button |
-| `filter-all` | All filter link |
-| `filter-active` | Active filter link |
-| `filter-completed` | Completed filter link |
-| `todo-count` | Active todo count |
-| `clear-completed` | Clear completed button |
-| `empty-state` | Empty list message |
-| `demo-notice` | In-memory demo notice |
+| Selector           | Element                         |
+| ------------------ | ------------------------------- |
+| `todo-form`        | New todo form                   |
+| `todo-input`       | New todo title input            |
+| `todo-submit`      | Add todo button                 |
+| `todo-error`       | Create validation error         |
+| `todo-list`        | Todo list                       |
+| `todo-item`        | Individual todo item            |
+| `todo-checkbox`    | Todo completion checkbox        |
+| `todo-delete`      | Todo delete/confirmation button |
+| `filter-all`       | All filter link                 |
+| `filter-active`    | Active filter link              |
+| `filter-completed` | Completed filter link           |
+| `todo-count`       | Active todo count               |
+| `clear-completed`  | Clear completed button          |
+| `empty-state`      | Empty list message              |
+| `demo-notice`      | In-memory demo notice           |
 
 Delete uses a two-click confirmation when JavaScript is enabled. Without JavaScript, the regular form submission deletes immediately so the action remains usable.
 

@@ -4,7 +4,7 @@
 	const filters = [
 		{ key: 'all', label: 'All', testId: 'filter-all' },
 		{ key: 'active', label: 'Active', testId: 'filter-active' },
-		{ key: 'completed', label: 'Completed', testId: 'filter-completed' }
+		{ key: 'completed', label: 'Completed', testId: 'filter-completed' },
 	];
 </script>
 

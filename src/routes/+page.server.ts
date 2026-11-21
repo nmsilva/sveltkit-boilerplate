@@ -23,20 +23,27 @@ export const load: PageServerLoad = async ({ url }) => {
 	try {
 		const repository = createTodoRepository();
 		const allTodos = await repository.list();
-		const todos = filter === 'active'
-			? allTodos.filter((todo) => !todo.is_done)
-			: filter === 'completed'
-				? allTodos.filter((todo) => todo.is_done)
-				: allTodos;
+		const todos =
+			filter === 'active'
+				? allTodos.filter((todo) => !todo.is_done)
+				: filter === 'completed'
+					? allTodos.filter((todo) => todo.is_done)
+					: allTodos;
 		return {
 			todos,
 			activeCount: allTodos.filter((todo) => !todo.is_done).length,
 			filter,
 			loadError: null,
-			demo: isDemoMode()
+			demo: isDemoMode(),
 		};
 	} catch {
-		return { todos: [], activeCount: 0, filter, loadError: 'Could not load todos right now. Please try again.', demo: isDemoMode() };
+		return {
+			todos: [],
+			activeCount: 0,
+			filter,
+			loadError: 'Could not load todos right now. Please try again.',
+			demo: isDemoMode(),
+		};
 	}
 };
 
@@ -47,13 +54,17 @@ export const actions: Actions = {
 
 		if (!title) return fail(400, { createError: 'Title is required.' });
 		if (title.length > TITLE_MAX_LENGTH) {
-			return fail(400, { createError: `Title must be ${TITLE_MAX_LENGTH} characters or fewer.` });
+			return fail(400, {
+				createError: `Title must be ${TITLE_MAX_LENGTH} characters or fewer.`,
+			});
 		}
 
 		try {
 			await createTodoRepository().create(title);
 		} catch {
-			return fail(500, { createError: 'Could not create todo right now. Please try again.' });
+			return fail(500, {
+				createError: 'Could not create todo right now. Please try again.',
+			});
 		}
 		return redirectToFilter(formData);
 	},
@@ -71,7 +82,9 @@ export const actions: Actions = {
 		try {
 			await createTodoRepository().toggle(id, nextStateRaw === 'true');
 		} catch {
-			return fail(500, { itemError: 'Could not update todo right now. Please try again.' });
+			return fail(500, {
+				itemError: 'Could not update todo right now. Please try again.',
+			});
 		}
 		return redirectToFilter(formData);
 	},
@@ -84,7 +97,9 @@ export const actions: Actions = {
 		try {
 			await createTodoRepository().remove(id);
 		} catch {
-			return fail(500, { itemError: 'Could not delete todo right now. Please try again.' });
+			return fail(500, {
+				itemError: 'Could not delete todo right now. Please try again.',
+			});
 		}
 		return redirectToFilter(formData);
 	},
@@ -98,8 +113,11 @@ export const actions: Actions = {
 				if (todo.is_done) await repository.remove(todo.id);
 			}
 		} catch {
-			return fail(500, { itemError: 'Could not clear completed todos right now. Please try again.' });
+			return fail(500, {
+				itemError:
+					'Could not clear completed todos right now. Please try again.',
+			});
 		}
 		return redirectToFilter(formData);
-	}
+	},
 };

@@ -7,12 +7,14 @@
 	const emptyMessages: Record<string, string> = {
 		all: 'No todos yet. Add your first item above.',
 		active: 'You have no active todos. Nice work!',
-		completed: 'No completed todos yet.'
+		completed: 'No completed todos yet.',
 	};
 </script>
 
 {#if todos.length === 0}
-	<p class="empty" data-testid="empty-state">{emptyMessages[filter] ?? emptyMessages.all}</p>
+	<p class="empty" data-testid="empty-state">
+		{emptyMessages[filter] ?? emptyMessages.all}
+	</p>
 {:else}
 	<ul data-testid="todo-list" aria-label="Todo list">
 		{#each todos as todo (todo.id)}
