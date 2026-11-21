@@ -1,0 +1,25 @@
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**'
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'bun.lock'
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+database:
+  - changed-files:
+      - any-glob-to-any-file: 'supabase/**'
+scripts:
+  - changed-files:
+      - any-glob-to-any-file: 'scripts/**'
+tests:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.test.ts'

@@ -132,7 +132,7 @@ Confirm that the two `PUBLIC_SUPABASE_*` variables are configured for the deploy
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, branch conventions, and pull request expectations.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, Conventional Commits, repository automation, and pull request expectations.
 
 ## License
 

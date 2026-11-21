@@ -35,12 +35,32 @@ bun run build
 
 Review the diff, update documentation when behavior or setup changes, and include a concise description of what changed and how it was tested.
 
-## Commit style
+## Conventional Commits
 
-Use simple, imperative commit messages that describe one focused change, for example:
+Use [Conventional Commits](https://www.conventionalcommits.org/) for commits and pull request titles. The title check accepts a type such as `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, `build`, or `perf`, optionally followed by a scope, a colon, and a short description:
 
-- `Add template setup instructions`
-- `Fix empty todo validation`
-- `Update deployment documentation`
+```text
+feat(auth): add password reset
+fix: handle an empty todo title
+```
 
-Keep commits small and avoid unrelated changes.
+Use `!` after the type or scope for a breaking change, or explain it with a `BREAKING CHANGE:` footer. Keep commits small, focused, and written in English.
+
+## Repository automation
+
+The repository uses GitHub Actions and Dependabot for routine maintenance:
+
+- **Release Please** opens a release pull request containing the changes for `CHANGELOG.md`. Merging that release pull request creates the version tag and GitHub Release.
+- **Dependabot** checks the Bun dependencies and GitHub Actions weekly. Minor and patch updates are grouped per ecosystem and eligible Dependabot pull requests are automatically merged with squash after required checks pass. Major updates remain for manual review.
+- **Stale** marks issues and pull requests stale after 60 days of inactivity and closes them 14 days later. Items labeled `pinned`, `security`, or `keep-open` are exempt.
+- **Labeler** applies labels based on changed files, including `docs`, `ci`, `dependencies`, `frontend`, `database`, `scripts`, and `tests`.
+- Pull request titles are validated as Conventional Commits.
+
+The following GitHub settings must be enabled manually; this repository does not change settings:
+
+- **Settings > General > Allow auto-merge**.
+- A branch protection rule or ruleset on `main` requiring the status checks that exist once CI is added, plus the `pr-title` check. Require pull request review as desired.
+- **Actions > General > Workflow permissions > Allow GitHub Actions to create and approve pull requests**, which is needed by Release Please.
+- Optionally create the `pinned`, `security`, `dependencies`, and labeler labels (`docs`, `ci`, `frontend`, `database`, `scripts`, and `tests`).
+
+Once a CI workflow exists, require `bun run check`, `bun run build`, and `bun test` as status checks.
