@@ -18,7 +18,7 @@
 		return async ({ result, update }) => {
 			if (result.type === 'failure') input.value = originalTitle;
 			await update();
-			if (result.type === 'success') input.focus();
+			if (result.type !== 'failure' && result.type !== 'error') input.focus();
 		};
 	}}
 >

@@ -11,6 +11,7 @@
 	let toggleForm = $state<HTMLFormElement>();
 	let deleteForm = $state<HTMLFormElement>();
 	let checkbox = $state<HTMLInputElement>();
+	let nextState = $state<HTMLInputElement>();
 	let confirmationTimer: ReturnType<typeof setTimeout>;
 
 	function askToDelete(event: MouseEvent) {
@@ -43,7 +44,12 @@
 			}}
 		>
 			<input type="hidden" name="id" value={todo.id} />
-			<input type="hidden" name="next_state" value={isDone ? 'true' : 'false'} />
+			<input
+				bind:this={nextState}
+				type="hidden"
+				name="next_state"
+				value={todo.is_done ? 'false' : 'true'}
+			/>
 			<input type="hidden" name="filter" value={filter} />
 			<input
 				bind:this={checkbox}
@@ -55,10 +61,12 @@
 				data-testid="todo-checkbox"
 				onchange={() => {
 					isDone = checkbox?.checked ?? false;
+					if (nextState) nextState.value = String(isDone);
 					toggleForm?.requestSubmit();
 				}}
 			/>
 			<label class:done={isDone} for={`todo-${todo.id}`}>{todo.title}</label>
+			<noscript><button type="submit" class="toggle-fallback">{todo.is_done ? 'Undo' : 'Done'}</button></noscript>
 		</form>
 
 		<form
