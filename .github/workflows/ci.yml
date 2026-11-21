@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: E2E (${{ matrix.backend }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        backend: [memory, turso-file]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.20
+      - name: Cache Bun and Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-bun-playwright-1.65.1-${{ hashFiles('bun.lock') }}
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Run end-to-end tests
+        run: bun run test:e2e
+        env:
+          E2E_BACKEND: ${{ matrix.backend }}
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ matrix.backend }}
+          path: |
+            playwright-report
+            test-results

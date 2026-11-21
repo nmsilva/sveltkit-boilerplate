@@ -126,6 +126,18 @@ The TODO page exposes stable selectors for browser and integration tests:
 
 Delete uses a two-click confirmation when JavaScript is enabled. Without JavaScript, the regular form submission deletes immediately so the action remains usable.
 
+## End-to-end tests
+
+The Playwright suite runs against the built app with either the in-memory demo provider or a local Turso database. It needs no credentials. Install Chromium once, then run the suite:
+
+```bash
+bun install
+bunx playwright install chromium
+bun run test:e2e
+```
+
+The default backend is memory. Select the backend explicitly with `E2E_BACKEND=memory` or `E2E_BACKEND=turso-file`; the latter creates a temporary database file and applies the Turso schema before starting the app. To use Playwright's interactive runner, run `bun run test:e2e:ui` (and set `E2E_BACKEND` if needed).
+
 ## Verification
 
 Use these commands before sharing a change:
