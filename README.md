@@ -1,5 +1,7 @@
 # SvelteKit + Supabase/Turso + Netlify Boilerplate
 
+[![CI](https://github.com/nmsilva/sveltkit-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/nmsilva/sveltkit-boilerplate/actions/workflows/ci.yml)
+
 A small SvelteKit TODO application with swappable persistence (Supabase, Turso, or an in-memory demo provider) and Netlify deployment. Use it as a starting point for a full-stack web project.
 
 ## Quick start
@@ -20,6 +22,18 @@ bun run db:push
 ```
 
 The `db:link` command reads `SUPABASE_PROJECT_REF` from your shell environment (it is not read from `.env`). Run it as `SUPABASE_PROJECT_REF=<your-project-ref> bun run db:link`, or export the variable first. See [Environment variables](#environment-variables) for details.
+
+## Commands
+
+```bash
+bun run dev          # start the development server
+bun run lint         # check JavaScript and TypeScript with ESLint
+bun run format       # format the project with Prettier
+bun run format:check # check formatting without changing files
+bun run check        # run Svelte and TypeScript checks
+bun test             # run unit tests
+bun run build        # create a production build
+```
 
 ## Choose a storage provider (`bun run setup`)
 
@@ -72,11 +86,11 @@ The memory provider keeps data in the server process and resets when the process
 
 Copy `.env.example` to `.env` and replace the placeholders with values from your Supabase project. In the Supabase dashboard, open **Project Settings > API** to find the project URL and publishable anon key. You can also leave database variables empty: the app then runs in memory demo mode.
 
-| Variable | Required | Description |
-| --- | --- | --- |
-| `PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL, available under **Project Settings > API**. |
-| `PUBLIC_SUPABASE_ANON_KEY` | Yes | The public anonymous key for your Supabase project, available under **Project Settings > API**. |
-| `SUPABASE_PROJECT_REF` | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
+| Variable                   | Required              | Description                                                                                                                                            |
+| -------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PUBLIC_SUPABASE_URL`      | Yes                   | Your Supabase project URL, available under **Project Settings > API**.                                                                                 |
+| `PUBLIC_SUPABASE_ANON_KEY` | Yes                   | The public anonymous key for your Supabase project, available under **Project Settings > API**.                                                        |
+| `SUPABASE_PROJECT_REF`     | For `bun run db:link` | The project reference (the `<ref>` in `https://<ref>.supabase.co`). Set it in your shell, not in `.env`: `SUPABASE_PROJECT_REF=<ref> bun run db:link`. |
 
 `PUBLIC_` variables are exposed to the browser. Do not put service-role keys, passwords, or other secrets in them. Never commit `.env`.
 
@@ -107,10 +121,14 @@ Run database migrations separately with the Supabase CLI. Netlify deployment doe
 Use these commands before sharing a change:
 
 ```bash
+bun run lint
+bun run format:check
 bun run check
-bun run build
 bun test
+bun run build
 ```
+
+Use `bun run format` to format files before checking them.
 
 ## Troubleshooting
 

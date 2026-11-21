@@ -13,7 +13,13 @@
 	{#if data.demo}
 		<p class="demo-notice">
 			Demo mode — data is kept in memory and resets on restart
-			<a href="https://github.com/nmsilva/sveltkit-boilerplate#connect-a-database" target="_blank" rel="noreferrer">Connect a database</a>
+			<a
+				href="https://github.com/nmsilva/sveltkit-boilerplate#connect-a-database"
+				target="_blank"
+				rel="noreferrer"
+			>
+				Connect a database
+			</a>
 		</p>
 	{/if}
 
@@ -48,12 +54,20 @@
 		<p class="empty">No todos yet. Add your first item above.</p>
 	{:else}
 		<ul>
-			{#each data.todos as todo}
+			{#each data.todos as todo (todo.id)}
 				<li>
 					<form method="POST" action="?/toggle" class="inline-form">
 						<input type="hidden" name="id" value={todo.id} />
-						<input type="hidden" name="next_state" value={todo.is_done ? 'false' : 'true'} />
-						<button type="submit" class="toggle" aria-label="Toggle todo status">
+						<input
+							type="hidden"
+							name="next_state"
+							value={todo.is_done ? 'false' : 'true'}
+						/>
+						<button
+							type="submit"
+							class="toggle"
+							aria-label="Toggle todo status"
+						>
 							{todo.is_done ? '✅' : '⬜️'}
 						</button>
 					</form>
@@ -62,7 +76,9 @@
 
 					<form method="POST" action="?/delete" class="inline-form">
 						<input type="hidden" name="id" value={todo.id} />
-						<button type="submit" class="danger" aria-label="Delete todo">Delete</button>
+						<button type="submit" class="danger" aria-label="Delete todo">
+							Delete
+						</button>
 					</form>
 				</li>
 			{/each}
@@ -73,7 +89,13 @@
 <style>
 	:global(body) {
 		margin: 0;
-		font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		font-family:
+			Inter,
+			system-ui,
+			-apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			sans-serif;
 		background: #0f172a;
 		color: #e2e8f0;
 	}

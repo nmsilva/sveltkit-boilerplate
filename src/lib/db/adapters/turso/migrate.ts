@@ -1,10 +1,16 @@
 import { createClient } from '@libsql/client';
 import { readFile } from 'node:fs/promises';
 
-export async function applySchema(url: string, authToken?: string): Promise<void> {
+export async function applySchema(
+	url: string,
+	authToken?: string,
+): Promise<void> {
 	const client = createClient({ url, ...(authToken ? { authToken } : {}) });
 	try {
-		const schema = await readFile(new URL('./schema.sql', import.meta.url), 'utf8');
+		const schema = await readFile(
+			new URL('./schema.sql', import.meta.url),
+			'utf8',
+		);
 		await client.executeMultiple(schema);
 	} finally {
 		client.close();
