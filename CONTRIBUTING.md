@@ -51,7 +51,7 @@ Use `!` after the type or scope for a breaking change, or explain it with a `BRE
 The repository uses GitHub Actions and Dependabot for routine maintenance:
 
 - **Release Please** opens a release pull request containing the changes for `CHANGELOG.md`. Merging that release pull request creates the version tag and GitHub Release.
-- **Dependabot** checks the Bun dependencies and GitHub Actions weekly. Minor and patch updates are grouped per ecosystem and eligible Dependabot pull requests are automatically merged with squash after required checks pass. Major updates remain for manual review.
+- **Dependabot** checks the Bun dependencies and GitHub Actions weekly. Minor and patch updates are grouped per ecosystem and eligible Dependabot pull requests are automatically merged with squash after required checks pass. Major updates remain for manual review. Dependabot titles use the `chore(deps)` and `ci(deps)` prefixes so they pass the title check.
 - **Stale** marks issues and pull requests stale after 60 days of inactivity and closes them 14 days later. Items labeled `pinned`, `security`, or `keep-open` are exempt.
 - **Labeler** applies labels based on changed files, including `docs`, `ci`, `dependencies`, `frontend`, `database`, `scripts`, and `tests`.
 - Pull request titles are validated as Conventional Commits.
