@@ -3,7 +3,8 @@ import { applySetup, parseArgs, selectProvider } from './lib/setup';
 import { providers } from './providers';
 
 function defaultProviderId() {
-	if (process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY) return 'supabase';
+	if (process.env.PUBLIC_SUPABASE_URL && process.env.PUBLIC_SUPABASE_ANON_KEY)
+		return 'supabase';
 	if (process.env.TURSO_DATABASE_URL) return 'turso';
 	return 'memory';
 }
@@ -16,8 +17,11 @@ async function main() {
 		else {
 			const answer = await select({
 				message: 'Choose a storage provider',
-				options: providers.map((provider) => ({ value: provider.id, label: provider.label })),
-				initialValue: defaultProviderId()
+				options: providers.map((provider) => ({
+					value: provider.id,
+					label: provider.label,
+				})),
+				initialValue: defaultProviderId(),
 			});
 			if (typeof answer !== 'string') return;
 			providerId = answer;
@@ -25,16 +29,20 @@ async function main() {
 	}
 	selectProvider(providerId);
 	intro('Boilerplate setup');
-	const overwriteEnv = !args.yes && !args.dryRun && await confirm({
-		message: 'If .env exists, may setup replace it? (It is never replaced with --yes)',
-		initialValue: false
-	});
+	const overwriteEnv =
+		!args.yes &&
+		!args.dryRun &&
+		(await confirm({
+			message:
+				'If .env exists, may setup replace it? (It is never replaced with --yes)',
+			initialValue: false,
+		}));
 	await applySetup(process.cwd(), providerId, {
 		yes: args.yes,
 		dryRun: args.dryRun,
 		noInstall: args.noInstall,
 		overwriteEnv: overwriteEnv === true,
-		log: (message) => console.log(message)
+		log: (message) => console.log(message),
 	});
 	outro('Setup complete');
 }

@@ -4,12 +4,12 @@
 	const filters = [
 		{ key: 'all', label: 'All', testId: 'filter-all' },
 		{ key: 'active', label: 'Active', testId: 'filter-active' },
-		{ key: 'completed', label: 'Completed', testId: 'filter-completed' }
+		{ key: 'completed', label: 'Completed', testId: 'filter-completed' },
 	];
 </script>
 
 <nav class="filters" aria-label="Filter todos">
-	{#each filters as item}
+	{#each filters as item (item.key)}
 		<a
 			href={item.key === 'all' ? '/' : `/?filter=${item.key}`}
 			aria-current={filter === item.key ? 'page' : undefined}

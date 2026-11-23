@@ -37,7 +37,9 @@
 					if (result.type === 'failure') {
 						isDone = previous;
 						if (checkbox) checkbox.checked = previous;
-						error = (result.data as { itemError?: string } | null)?.itemError ?? 'Could not update todo right now.';
+						error =
+							(result.data as { itemError?: string } | null)?.itemError ??
+							'Could not update todo right now.';
 					}
 					await update();
 				};
@@ -66,7 +68,11 @@
 				}}
 			/>
 			<label class:done={isDone} for={`todo-${todo.id}`}>{todo.title}</label>
-			<noscript><button type="submit" class="toggle-fallback">{todo.is_done ? 'Undo' : 'Done'}</button></noscript>
+			<noscript>
+				<button type="submit" class="toggle-fallback">
+					{todo.is_done ? 'Undo' : 'Done'}
+				</button>
+			</noscript>
 		</form>
 
 		<form
@@ -81,7 +87,9 @@
 				return async ({ result, update }) => {
 					if (result.type === 'failure') {
 						deleted = wasDeleted;
-						error = (result.data as { itemError?: string } | null)?.itemError ?? 'Could not delete todo right now.';
+						error =
+							(result.data as { itemError?: string } | null)?.itemError ??
+							'Could not delete todo right now.';
 					}
 					await update();
 				};
@@ -93,7 +101,9 @@
 				type="submit"
 				class:confirming
 				class="delete"
-				aria-label={confirming ? `Confirm deleting ${todo.title}` : `Delete ${todo.title}`}
+				aria-label={confirming
+					? `Confirm deleting ${todo.title}`
+					: `Delete ${todo.title}`}
 				onclick={askToDelete}
 				data-testid="todo-delete"
 			>

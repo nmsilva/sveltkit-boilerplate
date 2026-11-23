@@ -4,14 +4,14 @@ import { getActiveProvider, isDemoMode } from './active';
 const original = {
 	url: process.env.PUBLIC_SUPABASE_URL,
 	key: process.env.PUBLIC_SUPABASE_ANON_KEY,
-	turso: process.env.TURSO_DATABASE_URL
+	turso: process.env.TURSO_DATABASE_URL,
 };
 
 afterEach(() => {
 	for (const [name, value] of Object.entries({
 		PUBLIC_SUPABASE_URL: original.url,
 		PUBLIC_SUPABASE_ANON_KEY: original.key,
-		TURSO_DATABASE_URL: original.turso
+		TURSO_DATABASE_URL: original.turso,
 	})) {
 		if (value === undefined) delete process.env[name];
 		else process.env[name] = value;

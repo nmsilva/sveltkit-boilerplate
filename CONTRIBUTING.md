@@ -26,13 +26,17 @@ Create a focused branch from the latest default branch. Use a short, descriptive
 
 ## Before opening a pull request
 
-Run the checks locally:
+Run all CI checks locally:
 
 ```bash
+bun run lint
+bun run format:check
 bun run check
-bun run build
 bun test
+bun run build
 ```
+
+Use `bun run format` to format files before checking them.
 
 Run the end-to-end tests without credentials by installing Chromium and selecting a backend:
 

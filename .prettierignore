@@ -1,0 +1,6 @@
+bun.lock
+supabase/
+static/
+build/
+.svelte-kit/
+node_modules/

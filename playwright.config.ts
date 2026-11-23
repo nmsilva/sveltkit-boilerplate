@@ -32,12 +32,12 @@ export default defineConfig({
 	reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
 	use: {
 		baseURL: 'http://localhost:4173',
-		trace: 'on-first-retry'
+		trace: 'on-first-retry',
 	},
 	webServer: {
 		command: 'bun run build && bun run preview',
 		url: 'http://localhost:4173',
 		reuseExistingServer: false,
-		timeout: 120_000
-	}
+		timeout: 120_000,
+	},
 });

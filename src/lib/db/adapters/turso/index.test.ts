@@ -27,7 +27,10 @@ describe('Turso todo repository', () => {
 		await repository.create('first');
 		await repository.create('second');
 
-		expect((await repository.list()).map((todo) => todo.title)).toEqual(['second', 'first']);
+		expect((await repository.list()).map((todo) => todo.title)).toEqual([
+			'second',
+			'first',
+		]);
 	});
 
 	test('toggles and removes a todo', async () => {
@@ -36,6 +39,8 @@ describe('Turso todo repository', () => {
 		await repository.toggle(before[0].id, true);
 		expect((await repository.list())[0].is_done).toBe(true);
 		await repository.remove(before[0].id);
-		expect((await repository.list()).some((todo) => todo.id === before[0].id)).toBe(false);
+		expect(
+			(await repository.list()).some((todo) => todo.id === before[0].id),
+		).toBe(false);
 	});
 });
