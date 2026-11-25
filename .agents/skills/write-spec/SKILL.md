@@ -1,5 +1,5 @@
 ---
-name: escrever-spec
+name: write-spec
 description: Write an OpenSpec change proposal (proposal, tasks, spec deltas) for large or behaviour-changing work.
 ---
 

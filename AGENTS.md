@@ -55,4 +55,4 @@ Use [OpenSpec](docs/openspec.md) for large changes or changes that alter behavio
 
 ## Skills
 
-In `.agents/skills/`: `nova-feature`, `nova-migration-supabase`, `novo-componente-svelte5`, `escrever-spec`, `rever-pr`.
+In `.agents/skills/`: `new-feature`, `new-supabase-migration`, `new-svelte5-component`, `write-spec`, `review-pr`.

@@ -1,5 +1,5 @@
 ---
-name: nova-migration-supabase
+name: new-supabase-migration
 description: Create a Supabase migration and update the matching types and adapter. Use for any database schema change.
 ---
 

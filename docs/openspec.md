@@ -18,7 +18,7 @@ It was created with `bunx @fission-ai/openspec init --tools none`. The CLI is no
 
 ## Flow
 
-1. **Propose**: create `openspec/changes/<change-name>/` with `proposal.md` (why, what, impact), `tasks.md` (checklist), optional `design.md`, and spec deltas under `specs/<capability>/spec.md`. Use the `escrever-spec` skill. Check with `openspec validate <change-name>` and list with `openspec list`.
+1. **Propose**: create `openspec/changes/<change-name>/` with `proposal.md` (why, what, impact), `tasks.md` (checklist), optional `design.md`, and spec deltas under `specs/<capability>/spec.md`. Use the `write-spec` skill. Check with `openspec validate <change-name>` and list with `openspec list`.
 2. **Apply**: implement the tasks in order, ticking them in `tasks.md`, following [conventions](conventions.md) and [testing](testing.md).
 3. **Archive**: after merge run `openspec archive <change-name>`; it moves the change to `changes/archive/` and updates `specs/`.
 

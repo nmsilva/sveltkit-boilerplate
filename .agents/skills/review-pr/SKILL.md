@@ -1,5 +1,5 @@
 ---
-name: rever-pr
+name: review-pr
 description: Review a pull request or diff against this repo's rules with a checklist. Use before marking a PR ready.
 ---
 

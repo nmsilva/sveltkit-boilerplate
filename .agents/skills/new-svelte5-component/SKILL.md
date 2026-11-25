@@ -1,5 +1,5 @@
 ---
-name: novo-componente-svelte5
+name: new-svelte5-component
 description: Create a Svelte 5 component with runes (props, state, snippets, event attributes). Use when adding or changing UI components.
 ---
 
