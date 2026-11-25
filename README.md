@@ -116,6 +116,10 @@ After creating a migration, edit the generated file and run `bun run db:push` to
 
 Run database migrations separately with the Supabase CLI. Netlify deployment does not automatically run `bun run db:push`.
 
+## Development with agents
+
+This repository is set up for coding agents. Start with [`AGENTS.md`](AGENTS.md) (stack, commands, rules), then the detailed guides in [`docs/`](docs/) (architecture, conventions, database, testing, optional [OpenSpec](docs/openspec.md)). Reusable skills live in [`.agents/skills/`](.agents/skills/) (`.claude/skills` links to them).
+
 ## UI test selectors
 
 The TODO page exposes stable selectors for browser and integration tests:
