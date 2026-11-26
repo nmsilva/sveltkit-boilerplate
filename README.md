@@ -4,24 +4,25 @@
 
 A small SvelteKit TODO application with swappable persistence (Supabase, Turso, or an in-memory demo provider) and Netlify deployment. Use it as a starting point for a full-stack web project.
 
+<!-- TODO: add screenshot -->
+
 ## Quick start
 
 Get the app running locally in about five minutes:
 
 ```bash
 bun install
-bun run setup   # pick a provider, or use memory for a zero-configuration demo
 bun run dev
 ```
 
-Open the local URL printed by Vite. If no database credentials are configured, the app automatically uses the memory provider. Before the TODO list can persist data, add your Supabase project values to `.env` and apply the database migration:
+Open the local URL printed by Vite. If no database credentials are configured, the app automatically uses the memory provider, so no `.env` file is needed. To choose a persistent provider, see [Choose a storage provider](#choose-a-storage-provider-bun-run-setup). Before the TODO list can persist data with Supabase, add your Supabase project values to `.env` and apply the database migration:
 
 ```bash
-bun run db:link
+SUPABASE_PROJECT_REF=<your-project-ref> bun run db:link
 bun run db:push
 ```
 
-The `db:link` command reads `SUPABASE_PROJECT_REF` from your shell environment (it is not read from `.env`). Run it as `SUPABASE_PROJECT_REF=<your-project-ref> bun run db:link`, or export the variable first. See [Environment variables](#environment-variables) for details.
+The `db:link` script reads `SUPABASE_PROJECT_REF` from your shell environment (it is not read from `.env`). See [Environment variables](#environment-variables) for details.
 
 ## Commands
 
@@ -72,12 +73,12 @@ The memory provider keeps data in the server process and resets when the process
 
 1. Select **Use this template** on GitHub.
 2. Name your new repository and create it.
-3. Clone your repository and run the [quick start](#quick-start).
+3. Clone your repository, run `bun run setup` once on the fresh clone to choose a provider (see [Choose a storage provider](#choose-a-storage-provider-bun-run-setup)), commit the result, then follow the [quick start](#quick-start).
 4. Create a Supabase project and configure the environment variables.
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) 1.2 or later
+- [Bun](https://bun.sh/) 1.2.20, the version pinned in `package.json` and used in CI
 - A [Supabase](https://supabase.com/) project
 - A [Netlify](https://www.netlify.com/) account for deployment
 - The Supabase CLI for database commands ([installation guide](https://supabase.com/docs/guides/cli))
@@ -190,7 +191,7 @@ Confirm that the two `PUBLIC_SUPABASE_*` variables are configured for the deploy
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, Conventional Commits, repository automation, and pull request expectations.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, Conventional Commits, repository automation, and pull request expectations. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md) in all project spaces.
 
 ## License
 

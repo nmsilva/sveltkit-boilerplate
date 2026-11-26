@@ -1,6 +1,8 @@
 ---
 name: Bug report
 about: Report a reproducible problem
+title: '[Bug] '
+labels: bug
 ---
 
 ## Description
@@ -23,7 +25,8 @@ What happened instead?
 
 ## Environment
 
-- Bun version:
+- Bun version (`bun --version`):
+- Storage provider (memory, Supabase, or Turso):
 - Browser and version:
 - Operating system:
 
